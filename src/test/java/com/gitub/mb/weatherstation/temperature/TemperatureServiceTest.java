@@ -1,5 +1,6 @@
-package com.gitub.mb.weatherstation;
+package com.gitub.mb.weatherstation.temperature;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,11 +8,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.beans.factory.annotation.Value;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class HttpRequestFirstTest {
+public class TemperatureServiceTest {
 
   @Value(value="${local.server.port}")
   private int port;
@@ -20,8 +21,8 @@ public class HttpRequestFirstTest {
   private TestRestTemplate restTemplate;
 
   @Test
-  public void greetingShouldReturnDefaultMessage() throws Exception {
-    assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/",
-      String.class)).contains("Hello, World");
+  public void shouldReturnLatestTemperature() throws Exception {
+    ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:" + port + "/temperature", String.class);
+    Assertions.assertEquals(response.getStatusCode(), HttpStatus.OK);
   }
 }
