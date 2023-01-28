@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class TemperatureControllerE2ETest {
 
@@ -25,7 +27,7 @@ public class TemperatureControllerE2ETest {
   @DisplayName("Should return 200 for temperature retrieval")
   public void shouldReturnLatestTemperature() throws Exception {
     ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:" + port + "/temperature", String.class);
-    Assertions.assertEquals(response.getStatusCode(), HttpStatus.OK);
+    assertEquals(response.getStatusCode(), HttpStatus.OK);
   }
 
 }

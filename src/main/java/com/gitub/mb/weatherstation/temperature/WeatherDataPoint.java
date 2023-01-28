@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class WeatherDataPoint {
-  Double temperature;
+  private Double temperature;
 
 }
