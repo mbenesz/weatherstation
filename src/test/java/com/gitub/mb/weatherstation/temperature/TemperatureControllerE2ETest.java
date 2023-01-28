@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -24,10 +25,12 @@ public class TemperatureControllerE2ETest {
   private TestRestTemplate restTemplate;
 
   @Test
-  @DisplayName("Should return 200 for temperature retrieval")
-  public void shouldReturnLatestTemperature() throws Exception {
-    ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:" + port + "/temperature", String.class);
+  @DisplayName("Should return temperature")
+  public void shouldReturnTemperature() throws Exception {
+    ResponseEntity<WeatherDataPoint> response = restTemplate.getForEntity("http://localhost:" + port + "/temperature", WeatherDataPoint.class);
     assertEquals(response.getStatusCode(), HttpStatus.OK);
+    assertThat(response.getBody()).isNotNull();
+
   }
 
 }
