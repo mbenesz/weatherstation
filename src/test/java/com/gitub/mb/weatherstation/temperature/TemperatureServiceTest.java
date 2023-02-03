@@ -1,0 +1,25 @@
+package com.gitub.mb.weatherstation.temperature;
+
+import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
+
+class TemperatureServiceTest {
+
+    @Test
+    void shouldRetrieveTemperatureFromRepo() {
+        TemperatureRepository temperatureRepository = mock(TemperatureRepository.class);
+        TemperatureService temperatureService = new TemperatureService(temperatureRepository);
+        Optional<WeatherPoint> weatherPoint = Optional.of(new WeatherPoint(Long.MAX_VALUE, 5.0));
+        given(temperatureRepository.findTopByOrderByIdDesc()).willReturn(weatherPoint);
+        WeatherPoint weatherDataPoint = temperatureService.retrieveTemperature();
+
+        verify(temperatureRepository,times(1)).findTopByOrderByIdDesc();
+        assertNotNull(weatherDataPoint);
+        assertNotNull(weatherDataPoint.getTemperature());
+    }
+}

@@ -1,6 +1,5 @@
 package com.gitub.mb.weatherstation.temperature;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -24,12 +23,14 @@ public class TemperatureControllerE2ETest {
   @Autowired
   private TestRestTemplate restTemplate;
 
+
   @Test
   @DisplayName("Should return temperature")
   public void shouldReturnTemperature() throws Exception {
-    ResponseEntity<WeatherDataPoint> response = restTemplate.getForEntity("http://localhost:" + port + "/temperature", WeatherDataPoint.class);
+    ResponseEntity<WeatherPoint> response = restTemplate.getForEntity("http://localhost:" + port + "/temperature", WeatherPoint.class);
     assertEquals(response.getStatusCode(), HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
+    assertNotNull(response.getBody().getTemperature());
 
   }
 
