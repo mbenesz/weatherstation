@@ -1,6 +1,9 @@
 package com.gitub.mb.weatherstation.temperature;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Optional;
 
@@ -8,18 +11,21 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 class TemperatureServiceTest {
+    @Autowired
+    TemperatureRepository temperatureRepository;
+    TemperatureService temperatureService;
+
+    @BeforeEach
+    void setup() {
+        temperatureService = new TemperatureService(temperatureRepository);
+    }
 
     @Test
     void shouldRetrieveTemperatureFromRepo() {
-        TemperatureRepository temperatureRepository = mock(TemperatureRepository.class);
-        TemperatureService temperatureService = new TemperatureService(temperatureRepository);
-        Optional<WeatherPoint> weatherPoint = Optional.of(new WeatherPoint(Long.MAX_VALUE, 5.0));
-        given(temperatureRepository.findTopByOrderByIdDesc()).willReturn(weatherPoint);
-        WeatherPoint weatherDataPoint = temperatureService.retrieveTemperature();
+        WeatherPoint temperature = temperatureService.retrieveTemperature();
+        assertNotNull(temperature.getTemperature());
 
-        verify(temperatureRepository,times(1)).findTopByOrderByIdDesc();
-        assertNotNull(weatherDataPoint);
-        assertNotNull(weatherDataPoint.getTemperature());
     }
 }
