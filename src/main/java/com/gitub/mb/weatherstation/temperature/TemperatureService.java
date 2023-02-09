@@ -12,6 +12,6 @@ public class TemperatureService {
     }
 
     public WeatherPoint retrieveTemperature()  {
-        return new WeatherPoint(null,null);//temperatureRepository.findTopByOrderByIdDesc().orElseThrow(RuntimeException::new);
+        return temperatureRepository.findTopByOrderByIdDesc().get();
     }
 }

@@ -25,13 +25,13 @@ class TemperatureControllerTest {
     void shouldRetrieveTemperatureFromUnderlyingService() {
         //given
         given(temperatureService.retrieveTemperature())
-                .willReturn(new WeatherPoint(Long.MAX_VALUE,4.0));
+                .willReturn(new WeatherPoint(Long.MAX_VALUE, 4.0));
 
         //when
         WeatherPoint weatherDataPoint = temperatureController.getTemperature();
 
         //then
         verify(temperatureService, times(1)).retrieveTemperature();
-        assertEquals(4.0,weatherDataPoint.getTemperature());
+        assertEquals(4.0, weatherDataPoint.getTemperature());
     }
 }

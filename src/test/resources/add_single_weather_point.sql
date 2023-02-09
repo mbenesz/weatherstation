@@ -1,0 +1,1 @@
+INSERT INTO WEATHER_POINT values (1, 4.0);

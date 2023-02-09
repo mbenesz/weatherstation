@@ -3,13 +3,15 @@ package com.gitub.mb.weatherstation.temperature;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import lombok.Value;
+import lombok.*;
 
-@Value
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Entity
 public class WeatherPoint {
   @Id
   @GeneratedValue
-  Long id;
-  Double temperature;
+  private Long id;
+  private Double temperature;
 }
