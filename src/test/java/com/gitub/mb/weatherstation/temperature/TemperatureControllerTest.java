@@ -1,6 +1,7 @@
 package com.gitub.mb.weatherstation.temperature;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,6 +21,7 @@ class TemperatureControllerTest {
     }
 
     @Test
+    @DisplayName("Should retrieve temperature from underlying service")
     void shouldRetrieveTemperatureFromUnderlyingService() {
         given(temperatureService.retrieveTemperature())
                 .willReturn(new WeatherPoint(Long.MAX_VALUE,4.0));

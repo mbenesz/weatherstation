@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TemperatureService {
-    TemperatureRepository temperatureRepository;
+    private TemperatureRepository temperatureRepository;
 
     public TemperatureService(TemperatureRepository temperatureRepository) {
         this.temperatureRepository = temperatureRepository;
@@ -12,7 +12,6 @@ public class TemperatureService {
     }
 
     public WeatherPoint retrieveTemperature()  {
-        return temperatureRepository.findTopByOrderByIdDesc()
-                .orElseThrow(RuntimeException::new);
+        return new WeatherPoint(null,null);//temperatureRepository.findTopByOrderByIdDesc().orElseThrow(RuntimeException::new);
     }
 }

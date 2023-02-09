@@ -1,5 +1,6 @@
 package com.gitub.mb.weatherstation.temperature;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -11,6 +12,7 @@ import static org.mockito.Mockito.*;
 class TemperatureServiceTest {
 
     @Test
+    @DisplayName("Should retrieve temperature from repo")
     void shouldRetrieveTemperatureFromRepo() {
         TemperatureRepository temperatureRepository = mock(TemperatureRepository.class);
         TemperatureService temperatureService = new TemperatureService(temperatureRepository);
