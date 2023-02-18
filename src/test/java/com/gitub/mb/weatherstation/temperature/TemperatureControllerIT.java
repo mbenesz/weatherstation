@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -30,6 +31,14 @@ public class TemperatureControllerIT {
         mockMvc.perform(get("/temperature"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.temperature").exists())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("Should return 201 status when post temperature")
+    public void shouldReturn201WhenPostTemperature() throws Exception {
+        mockMvc.perform(post("/temperature"))
+                .andExpect(status().isCreated())
                 .andDo(print());
     }
 }
