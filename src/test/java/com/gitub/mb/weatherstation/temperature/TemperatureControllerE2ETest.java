@@ -26,13 +26,23 @@ public class TemperatureControllerE2ETest {
 
 
   @Test
-  @DisplayName("Should return temperature")
-  public void shouldReturnTemperature() throws Exception {
-    ResponseEntity<WeatherPoint> response = restTemplate.getForEntity("http://localhost:" + port + "/temperature", WeatherPoint.class);
-    assertEquals(response.getStatusCode(), HttpStatus.OK);
-    assertThat(response.getBody()).isNotNull();
-    assertNotNull(response.getBody().getTemperature());
+  @DisplayName("Should create and then return temperature")
+  public void shouldCreateAndThenReturnTemperature() throws Exception {
+    //given
+    String temperatureEndPoint = "http://localhost:" + port + "/temperature";
+    WeatherPoint weatherPoint = new WeatherPoint(1L, 4.0);
 
+    //when
+    ResponseEntity<WeatherPoint> postResponse = restTemplate.postForEntity(temperatureEndPoint, weatherPoint, WeatherPoint.class);
+    ResponseEntity<WeatherPoint> getResponse = restTemplate.getForEntity(temperatureEndPoint, WeatherPoint.class);
+
+    //then
+    assertEquals(HttpStatus.CREATED,postResponse.getStatusCode());
+    assertEquals(HttpStatus.OK,getResponse.getStatusCode());
+    assertThat(getResponse.getBody()).isNotNull();
+    assertNotNull(getResponse.getBody().getTemperature());
   }
+
+
 
 }

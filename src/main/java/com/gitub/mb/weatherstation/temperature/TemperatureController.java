@@ -16,7 +16,9 @@ public class TemperatureController {
 
   @GetMapping("/temperature")
   @ResponseStatus(HttpStatus.OK)
-  WeatherPoint getTemperature() {
+  public WeatherPoint getTemperature() {
     return temperatureService.retrieveTemperature();
   }
+
+
 }
