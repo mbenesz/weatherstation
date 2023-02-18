@@ -2,6 +2,7 @@ package com.gitub.mb.weatherstation.temperature;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,6 +19,12 @@ public class TemperatureController {
   @ResponseStatus(HttpStatus.OK)
   public WeatherPoint getTemperature() {
     return temperatureService.retrieveTemperature();
+  }
+
+  @PostMapping("/temperature")
+  @ResponseStatus(HttpStatus.CREATED)
+  public WeatherPoint postTemperature() {
+    return null;
   }
 
 
