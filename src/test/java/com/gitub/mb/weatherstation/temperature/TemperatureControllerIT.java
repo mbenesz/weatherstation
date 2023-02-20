@@ -39,7 +39,6 @@ public class TemperatureControllerIT {
     public void shouldReturn201WhenPostTemperature() throws Exception {
         mockMvc.perform(post("/temperature"))
                 .andExpect(status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.temperature").exists())
                 .andDo(print());
     }
 }

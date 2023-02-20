@@ -12,6 +12,6 @@ public class TemperatureService {
     }
 
     public WeatherPoint retrieveTemperature()  {
-        return temperatureRepository.findTopByOrderByIdDesc().get();        //na optionalu get rzuca 500 gdy nie ma nic w bazie
+        return temperatureRepository.findTopByOrderByIdDesc().get();
     }
 }

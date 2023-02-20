@@ -23,9 +23,8 @@ public class TemperatureController {
 
   @PostMapping("/temperature")
   @ResponseStatus(HttpStatus.CREATED)
-  public WeatherPoint postTemperature() {
-    return new WeatherPoint();
+  public void postTemperature() {
+
   }
-
-
+  
 }
