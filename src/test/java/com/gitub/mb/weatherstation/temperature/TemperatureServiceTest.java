@@ -17,6 +17,7 @@ class TemperatureServiceTest {
         //given
         TemperatureRepository temperatureRepository = mock(TemperatureRepository.class);
         TemperatureService temperatureService = new TemperatureService(temperatureRepository);
+
         Optional<WeatherPoint> weatherPoint = Optional.of(new WeatherPoint(Long.MAX_VALUE, 5.0));
         given(temperatureRepository.findTopByOrderByIdDesc()).willReturn(weatherPoint);
 
