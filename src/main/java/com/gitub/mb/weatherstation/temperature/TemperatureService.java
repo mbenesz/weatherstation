@@ -10,7 +10,6 @@ public class TemperatureService {
         this.temperatureRepository = temperatureRepository;
 
     }
-
     public WeatherPoint retrieveTemperature()  {
         return temperatureRepository.findTopByOrderByIdDesc().get();
     }
