@@ -41,4 +41,13 @@ public class TemperatureControllerIT {
                 .andExpect(status().isCreated())
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("Should return 404 status when get temperature")
+    public void shouldReturn404WhenGetTemperature() throws Exception {
+        mockMvc.perform(get("/temperature"))
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
 }
