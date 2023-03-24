@@ -30,15 +30,21 @@ public class TemperatureControllerIT {
     public void shouldReturn200WhenGetTemperature() throws Exception {
         mockMvc.perform(get("/temperature"))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.temperature").exists())
-                .andDo(print());
+                .andExpect(MockMvcResultMatchers.jsonPath("$.temperature").exists());
     }
 
     @Test
     @DisplayName("Should return 201 status when post temperature")
     public void shouldReturn201WhenPostTemperature() throws Exception {
         mockMvc.perform(post("/temperature"))
-                .andExpect(status().isCreated())
-                .andDo(print());
+                .andExpect(status().isCreated());
     }
+
+    @Test
+    @DisplayName("Should return 404 status when get temperature")
+    public void shouldReturn404WhenGetTemperature() throws Exception {
+        mockMvc.perform(get("/temperature"))
+                .andExpect(status().isNotFound());
+    }
+
 }
