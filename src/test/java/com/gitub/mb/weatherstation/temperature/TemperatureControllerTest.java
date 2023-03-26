@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -25,7 +27,7 @@ class TemperatureControllerTest {
     void shouldRetrieveTemperatureFromUnderlyingService() {
         //given
         given(temperatureService.retrieveTemperature())
-                .willReturn(new WeatherPoint(Long.MAX_VALUE, 4.0));
+                .willReturn(new WeatherPoint(Long.MAX_VALUE, 4.0, LocalDateTime.now()));
 
         //when
         WeatherPoint weatherDataPoint = temperatureController.getTemperature();

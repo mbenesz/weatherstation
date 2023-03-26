@@ -3,6 +3,7 @@ package com.gitub.mb.weatherstation.temperature;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,7 +19,7 @@ class TemperatureServiceTest {
         TemperatureRepository temperatureRepository = mock(TemperatureRepository.class);
         TemperatureService temperatureService = new TemperatureService(temperatureRepository);
 
-        Optional<WeatherPoint> weatherPoint = Optional.of(new WeatherPoint(Long.MAX_VALUE, 5.0));
+        Optional<WeatherPoint> weatherPoint = Optional.of(new WeatherPoint(Long.MAX_VALUE, 5.0, LocalDateTime.now()));
         given(temperatureRepository.findTopByOrderByIdDesc()).willReturn(weatherPoint);
 
         //when
