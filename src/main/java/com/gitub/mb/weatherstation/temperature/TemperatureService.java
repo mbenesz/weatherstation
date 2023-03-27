@@ -17,4 +17,8 @@ public class TemperatureService {
         return temperatureRepository.findTopByOrderByIdDesc()
                 .orElseThrow(NoSuchElementException::new);
     }
+
+    public void addTemperature(WeatherPoint weatherPoint) {
+        temperatureRepository.save(weatherPoint);
+    }
 }

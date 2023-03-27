@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.lang.NonNull;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -17,9 +18,9 @@ public class WeatherPoint {
   @GeneratedValue
   private Long id;
   private Double temperature;
-  private LocalDateTime created;
+  private Timestamp created;
 
-  public WeatherPoint(Double temperature, LocalDateTime created) {
+  public WeatherPoint(Double temperature, Timestamp created) {
     this.temperature = temperature;
     this.created = created;
   }

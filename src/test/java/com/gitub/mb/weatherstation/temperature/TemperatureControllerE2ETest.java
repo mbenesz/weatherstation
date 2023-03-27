@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,7 +33,7 @@ public class TemperatureControllerE2ETest {
   public void shouldCreateAndThenReturnTemperature() throws Exception {
     //given
     String temperatureEndPoint = "http://localhost:" + port + "/temperature";
-    WeatherPoint weatherPoint = new WeatherPoint(1L, 4.0, LocalDateTime.now());
+    WeatherPoint weatherPoint = new WeatherPoint(1L, 4.0, Timestamp.valueOf(LocalDateTime.now()));
 
     //when
     ResponseEntity<WeatherPoint> postResponse = restTemplate.postForEntity(temperatureEndPoint, weatherPoint, WeatherPoint.class);

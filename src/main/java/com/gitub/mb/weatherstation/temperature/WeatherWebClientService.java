@@ -6,13 +6,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Map;
 
 @Service
 public class WeatherWebClientService {
     // this filed to be use as a parameter in Controller
-    private static final String EXTERNAL_API_URL = "https://api.openweathermap.org/data/2.5/weather?q=Poznan&units=metric&appid=2dc1c049667bc96025ea0f43e05ef8db";
+    //private static final String EXTERNAL_API_URL = "https://api.openweathermap.org/data/2.5/weather?q=Poznan&units=metric&appid=2dc1c049667bc96025ea0f43e05ef8db";
 
 
     private ObjectMapper objectMapper;
@@ -42,7 +43,7 @@ public class WeatherWebClientService {
             e.getMessage();
         }
 
-        return new WeatherPoint((Double) temperature, LocalDateTime.now());
+        return new WeatherPoint((Double) temperature, Timestamp.valueOf(LocalDateTime.now()));
 
     }
 }

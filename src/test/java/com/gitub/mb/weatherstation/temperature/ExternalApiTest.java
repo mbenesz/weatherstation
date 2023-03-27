@@ -61,7 +61,6 @@ public class ExternalApiTest {
         //then
         assertNotNull(weatherPoint);
         verify(getRequestedFor(urlEqualTo("/some/thing")));
-        System.out.println(weatherPoint);
 
     }
 
