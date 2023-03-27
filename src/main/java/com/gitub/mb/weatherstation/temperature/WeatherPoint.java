@@ -1,8 +1,6 @@
 package com.gitub.mb.weatherstation.temperature;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.lang.NonNull;
 
@@ -15,7 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 public class WeatherPoint {
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private Double temperature;
   private Timestamp created;
