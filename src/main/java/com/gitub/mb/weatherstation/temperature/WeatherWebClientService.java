@@ -12,7 +12,7 @@ import java.util.Map;
 @Service
 public class WeatherWebClientService {
     // this filed to be use as a parameter in Controller
-    //private static final String EXTERNAL_API_URL = "https://api.open-meteo.com/v1/forecast?latitude=52.41&longitude=16.93&hourly=temperature_2m&current_weather=true";
+    private static final String EXTERNAL_API_URL = "https://api.openweathermap.org/data/2.5/weather?q=Poznan&units=metric&appid=2dc1c049667bc96025ea0f43e05ef8db";
 
 
     private ObjectMapper objectMapper;
@@ -36,7 +36,7 @@ public class WeatherWebClientService {
         Object temperature = null;
         try {
             Map<String, Map<String, Object>> map = objectMapper.readValue(response, Map.class);
-            temperature = map.get("current_weather").get("temperature");
+            temperature = map.get("main").get("temp");
 
         } catch (JsonProcessingException e) {
             e.getMessage();

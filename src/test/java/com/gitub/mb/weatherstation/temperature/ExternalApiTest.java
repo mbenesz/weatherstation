@@ -32,7 +32,7 @@ public class ExternalApiTest {
     @DisplayName("Should return 200 ok when get on wiremock API")
     public void wiremock_with_junit_test() throws Exception {
         //given
- //       configureFor("localhost", 9090);
+        configureFor("localhost", 9090);
         stubFor(get(urlEqualTo("/some/thing")).willReturn(aResponse().withBody("the weather is fine")));
         //when
         TestRestTemplate testRestTemplate = new TestRestTemplate();
@@ -50,7 +50,7 @@ public class ExternalApiTest {
         ObjectMapper objectMapper = new ObjectMapper();
         WeatherWebClientService weatherWebClientService = new WeatherWebClientService(objectMapper,restTemplate);
 
-        Path filePath = Path.of("./src/test/resources/response.json");
+        Path filePath = Path.of("./src/test/resources/response1.json");
         String content = Files.readString(filePath);
 
         configureFor("localhost", 9090);
@@ -61,6 +61,7 @@ public class ExternalApiTest {
         //then
         assertNotNull(weatherPoint);
         verify(getRequestedFor(urlEqualTo("/some/thing")));
+        System.out.println(weatherPoint);
 
     }
 
