@@ -6,6 +6,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.mockito.ArgumentMatchers;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.web.client.RestTemplate;
@@ -13,13 +14,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+
 
 @SpringBootTest
 //@RunWith(SpringRunner.class)
@@ -102,6 +104,6 @@ public class ExternalApiTest {
         weatherWebClientService.addRetrievedWeatherPointFromApi("http://localhost:9090/some/thing");
 
         //then
-        verify(temperatureRepository, times(1)).save(ArgumentMatchers.any());
+        Mockito.verify(temperatureRepository, times(1)).save(ArgumentMatchers.any());
     }
 }
