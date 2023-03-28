@@ -12,15 +12,12 @@ import java.util.Map;
 
 @Service
 public class WeatherWebClientService {
-    // this filed to be use as a parameter in Controller
+    // temporary info
     //private static final String EXTERNAL_API_URL = "https://api.openweathermap.org/data/2.5/weather?q=Poznan&units=metric&appid=2dc1c049667bc96025ea0f43e05ef8db";
-
 
     private ObjectMapper objectMapper;
 
     private RestTemplate restTemplate;
-
-
 
     public WeatherWebClientService(ObjectMapper objectMapper, RestTemplate restTemplate) {
         this.objectMapper = objectMapper;
@@ -32,7 +29,7 @@ public class WeatherWebClientService {
         return mapStringToWeatherPoint(response);
     }
 
-    private WeatherPoint mapStringToWeatherPoint(String response) {
+    public WeatherPoint mapStringToWeatherPoint(String response) {
 
         Object temperature = null;
         try {
