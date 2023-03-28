@@ -5,6 +5,7 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.mockito.ArgumentMatchers;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.web.client.RestTemplate;
@@ -16,14 +17,19 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 //@RunWith(SpringRunner.class)
 public class ExternalApiTest {
     private WeatherWebClientService weatherWebClientService;
+    private TemperatureRepository temperatureRepository;
 
     public void setup() {
-        weatherWebClientService = new WeatherWebClientService(new ObjectMapper(),new RestTemplate());
+        temperatureRepository = mock(TemperatureRepository.class);
+        weatherWebClientService = new WeatherWebClientService(new ObjectMapper(),new RestTemplate(),temperatureRepository);
     }
 
     @Rule
@@ -72,6 +78,7 @@ public class ExternalApiTest {
 
         configureFor("localhost", 9090);
         stubFor(get(urlEqualTo("/some/thing")).willReturn(aResponse().withBody(content)));
+
         //when
         WeatherPoint weatherPoint = weatherWebClientService.retrieveWeatherPointFromApi("http://localhost:9090/some/thing");
 
@@ -80,8 +87,21 @@ public class ExternalApiTest {
         verify(getRequestedFor(urlEqualTo("/some/thing")));
 
     }
+    @Test
+    @DisplayName("Should save json response from external Api to repository")
+    public void shouldSaveResponseFromApiToRepository() throws IOException {
+        setup();
+        //given
+        Path filePath = Path.of("./src/test/resources/response1.json");
+        String content = Files.readString(filePath);
 
+        configureFor("localhost", 9090);
+        stubFor(get(urlEqualTo("/some/thing")).willReturn(aResponse().withBody(content)));
 
+        //when
+        weatherWebClientService.addRetrievedWeatherPointFromApi("http://localhost:9090/some/thing");
 
-
+        //then
+        verify(temperatureRepository, times(1)).save(ArgumentMatchers.any());
+    }
 }

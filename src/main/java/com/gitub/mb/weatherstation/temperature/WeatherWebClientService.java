@@ -18,10 +18,12 @@ public class WeatherWebClientService {
     private ObjectMapper objectMapper;
 
     private RestTemplate restTemplate;
+    private TemperatureRepository temperatureRepository;
 
-    public WeatherWebClientService(ObjectMapper objectMapper, RestTemplate restTemplate) {
+    public WeatherWebClientService(ObjectMapper objectMapper, RestTemplate restTemplate,TemperatureRepository temperatureRepository) {
         this.objectMapper = objectMapper;
         this.restTemplate = restTemplate;
+        this.temperatureRepository = temperatureRepository;
     }
 
     public WeatherPoint retrieveWeatherPointFromApi(String url) {
@@ -42,5 +44,10 @@ public class WeatherWebClientService {
 
         return new WeatherPoint((Double) temperature, Timestamp.valueOf(LocalDateTime.now()));
 
+    }
+    public void addRetrievedWeatherPointFromApi(String url) {
+        String response = restTemplate.getForObject(url, String.class);
+        WeatherPoint weatherPoint = mapStringToWeatherPoint(response);
+        temperatureRepository.save(weatherPoint);
     }
 }
