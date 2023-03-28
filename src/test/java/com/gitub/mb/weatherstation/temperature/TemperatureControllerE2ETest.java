@@ -10,7 +10,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.jdbc.Sql;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -29,11 +28,11 @@ public class TemperatureControllerE2ETest {
 
 
   @Test
-  @DisplayName("Should create and then return temperature")
-  public void shouldCreateAndThenReturnTemperature() throws Exception {
+  @DisplayName("Should create and then return created temperature")
+  public void shouldCreateAndThenReturnCreatedTemperature() throws Exception {
     //given
     String temperatureEndPoint = "http://localhost:" + port + "/temperature";
-    WeatherPoint weatherPoint = new WeatherPoint(1L, 4.0, Timestamp.valueOf(LocalDateTime.now()));
+    WeatherPoint weatherPoint = new WeatherPoint(4.0, Timestamp.valueOf(LocalDateTime.now()));
 
     //when
     ResponseEntity<WeatherPoint> postResponse = restTemplate.postForEntity(temperatureEndPoint, weatherPoint, WeatherPoint.class);
@@ -43,9 +42,8 @@ public class TemperatureControllerE2ETest {
     assertEquals(HttpStatus.CREATED,postResponse.getStatusCode());
     assertEquals(HttpStatus.OK,getResponse.getStatusCode());
     assertThat(getResponse.getBody()).isNotNull();
-    assertNotNull(getResponse.getBody().getTemperature());
+    assertEquals(getResponse.getBody().getTemperature(),4.0);
+    assertEquals(getResponse.getBody().getId(),1L);
   }
-
-
 
 }
