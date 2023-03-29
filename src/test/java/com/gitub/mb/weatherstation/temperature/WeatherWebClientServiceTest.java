@@ -10,10 +10,10 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.web.client.RestTemplate;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
@@ -24,14 +24,13 @@ import static org.mockito.Mockito.times;
 
 
 @SpringBootTest
-//@RunWith(SpringRunner.class)
 public class WeatherWebClientServiceTest {
     private WeatherWebClientService weatherWebClientService;
     private TemperatureRepository temperatureRepository;
 
     public void setup() {
         temperatureRepository = mock(TemperatureRepository.class);
-        weatherWebClientService = new WeatherWebClientService(new ObjectMapper(),new RestTemplate(),temperatureRepository);
+        weatherWebClientService = new WeatherWebClientService(new ObjectMapper(), new RestTemplate(), temperatureRepository);
     }
 
     @Rule
@@ -67,7 +66,6 @@ public class WeatherWebClientServiceTest {
         //then
         assertNotNull(weatherPoint);
         assertEquals(WeatherPoint.class, weatherPoint.getClass());
-
     }
 
     @Test
@@ -87,8 +85,8 @@ public class WeatherWebClientServiceTest {
         //then
         assertNotNull(weatherPoint);
         verify(getRequestedFor(urlEqualTo("/some/thing")));
-
     }
+
     @Test
     @DisplayName("Should save json response from external Api to repository")
     public void shouldSaveResponseFromApiToRepository() throws IOException {

@@ -20,30 +20,29 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class TemperatureControllerE2ETest {
 
-  @Value(value="${local.server.port}")
-  private int port;
+    @Value(value = "${local.server.port}")
+    private int port;
 
-  @Autowired
-  private TestRestTemplate restTemplate;
+    @Autowired
+    private TestRestTemplate restTemplate;
 
+    @Test
+    @DisplayName("Should create and then return created temperature")
+    public void shouldCreateAndThenReturnCreatedTemperature() throws Exception {
+        //given
+        String temperatureEndPoint = "http://localhost:" + port + "/temperature";
+        WeatherPoint weatherPoint = new WeatherPoint(4.0, Timestamp.valueOf(LocalDateTime.now()));
 
-  @Test
-  @DisplayName("Should create and then return created temperature")
-  public void shouldCreateAndThenReturnCreatedTemperature() throws Exception {
-    //given
-    String temperatureEndPoint = "http://localhost:" + port + "/temperature";
-    WeatherPoint weatherPoint = new WeatherPoint(4.0, Timestamp.valueOf(LocalDateTime.now()));
+        //when
+        ResponseEntity<WeatherPoint> postResponse = restTemplate.postForEntity(temperatureEndPoint, weatherPoint, WeatherPoint.class);
+        ResponseEntity<WeatherPoint> getResponse = restTemplate.getForEntity(temperatureEndPoint, WeatherPoint.class);
 
-    //when
-    ResponseEntity<WeatherPoint> postResponse = restTemplate.postForEntity(temperatureEndPoint, weatherPoint, WeatherPoint.class);
-    ResponseEntity<WeatherPoint> getResponse = restTemplate.getForEntity(temperatureEndPoint, WeatherPoint.class);
-
-    //then
-    assertEquals(HttpStatus.CREATED,postResponse.getStatusCode());
-    assertEquals(HttpStatus.OK,getResponse.getStatusCode());
-    assertThat(getResponse.getBody()).isNotNull();
-    assertEquals(getResponse.getBody().getTemperature(),4.0);
-    assertEquals(getResponse.getBody().getId(),1L);
-  }
+        //then
+        assertEquals(HttpStatus.CREATED, postResponse.getStatusCode());
+        assertEquals(HttpStatus.OK, getResponse.getStatusCode());
+        assertThat(getResponse.getBody()).isNotNull();
+        assertEquals(getResponse.getBody().getTemperature(), 4.0);
+        assertEquals(getResponse.getBody().getId(), 1L);
+    }
 
 }

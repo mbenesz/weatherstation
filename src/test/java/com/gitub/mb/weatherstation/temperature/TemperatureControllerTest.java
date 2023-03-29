@@ -49,8 +49,6 @@ class TemperatureControllerTest {
 
         //then
         verify(temperatureService, times(1)).addTemperature(weatherPoint);
-
     }
-
 
 }

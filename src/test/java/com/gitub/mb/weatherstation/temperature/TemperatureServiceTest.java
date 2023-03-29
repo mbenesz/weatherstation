@@ -51,7 +51,6 @@ class TemperatureServiceTest {
 
         //then
         verify(temperatureRepository, times(1)).save(weatherPoint);
-
     }
 
 }
