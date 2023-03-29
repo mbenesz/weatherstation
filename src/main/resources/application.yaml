@@ -12,6 +12,5 @@ spring:
       hibernate:
         format_sql: true
   cache:
-    type:
-      jcache:
-        config: classpath:ehcache.xml
+    jcache:
+      config: classpath:ehcache.xml
