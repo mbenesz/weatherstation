@@ -1,5 +1,6 @@
 package com.gitub.mb.weatherstation.temperature;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
@@ -13,6 +14,7 @@ public class TemperatureService {
 
     }
 
+    @Cacheable(cacheNames = "retrieveTemperature")
     public WeatherPoint retrieveTemperature()  {
         return temperatureRepository.findTopByOrderByIdDesc()
                 .orElseThrow(NoSuchElementException::new);
