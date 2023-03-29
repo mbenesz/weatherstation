@@ -45,7 +45,7 @@ public class WeatherWebClientService {
         return new WeatherPoint((Double) temperature, Timestamp.valueOf(LocalDateTime.now()));
 
     }
-    public void addRetrievedWeatherPointFromApi(String url) {
+    public void addRetrievedWeatherPoint(String url) {
         String response = restTemplate.getForObject(url, String.class);
         WeatherPoint weatherPoint = mapStringToWeatherPoint(response);
         temperatureRepository.save(weatherPoint);

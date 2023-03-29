@@ -101,7 +101,7 @@ public class ExternalApiTest {
         stubFor(get(urlEqualTo("/some/thing")).willReturn(aResponse().withBody(content)));
 
         //when
-        weatherWebClientService.addRetrievedWeatherPointFromApi("http://localhost:9090/some/thing");
+        weatherWebClientService.addRetrievedWeatherPoint("http://localhost:9090/some/thing");
 
         //then
         Mockito.verify(temperatureRepository, times(1)).save(ArgumentMatchers.any());
