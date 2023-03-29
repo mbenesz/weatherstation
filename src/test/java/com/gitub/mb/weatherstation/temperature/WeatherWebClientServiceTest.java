@@ -25,7 +25,7 @@ import static org.mockito.Mockito.times;
 
 @SpringBootTest
 //@RunWith(SpringRunner.class)
-public class ExternalApiTest {
+public class WeatherWebClientServiceTest {
     private WeatherWebClientService weatherWebClientService;
     private TemperatureRepository temperatureRepository;
 
