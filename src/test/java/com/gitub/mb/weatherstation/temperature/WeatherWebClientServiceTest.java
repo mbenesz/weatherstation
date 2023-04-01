@@ -6,10 +6,13 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -25,7 +28,10 @@ import static org.mockito.Mockito.times;
 
 
 @SpringBootTest
+@RunWith(SpringRunner.class)
 public class WeatherWebClientServiceTest {
+    @Value(value = "${text.api.url}")
+    String realApiUrl;
 
     private int port;
     private WeatherWebClientService weatherWebClientService;
@@ -39,7 +45,7 @@ public class WeatherWebClientServiceTest {
     }
 
     @Rule
-    public WireMockRule wireMockRule = new WireMockRule(options().port(port));
+    public WireMockRule wireMockRule = new WireMockRule(options().dynamicPort());
 
     @Test
     @DisplayName("Should return 200 ok when get on wiremock API")
