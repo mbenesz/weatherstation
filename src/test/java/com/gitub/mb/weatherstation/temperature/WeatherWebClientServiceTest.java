@@ -2,16 +2,14 @@ package com.gitub.mb.weatherstation.temperature;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -19,7 +17,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -27,19 +24,19 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 public class WeatherWebClientServiceTest {
-    @Value(value = "${local.server.port}")
-    private int port;
 
+    private int port;
     private WeatherWebClientService weatherWebClientService;
     private TemperatureRepository temperatureRepository;
 
+    @Before
     public void setup() {
         temperatureRepository = mock(TemperatureRepository.class);
         weatherWebClientService = new WeatherWebClientService(new ObjectMapper(), new RestTemplate(), temperatureRepository);
+        port = wireMockRule.port();
     }
-
 
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(options().port(port));
@@ -64,7 +61,6 @@ public class WeatherWebClientServiceTest {
     @Test
     @DisplayName("Should map json response into WeatherPoint")
     public void shouldMapJsonResponseToWeatherPoint() throws IOException {
-        setup();
         //given
         Path filePath = Path.of("./src/test/resources/response1.json");
         String content = Files.readString(filePath);
@@ -80,7 +76,6 @@ public class WeatherWebClientServiceTest {
     @Test
     @DisplayName("Should return WeatherPont when call external API")
     public void shouldReturnWeatherPointWhenCallApi() throws Exception {
-        setup();
         //given
         String apiUrl = "http://localhost:" + port + "/some/thing";
         Path filePath = Path.of("./src/test/resources/response1.json");
@@ -100,7 +95,6 @@ public class WeatherWebClientServiceTest {
     @Test
     @DisplayName("Should save json response from external Api to repository")
     public void shouldSaveResponseFromApiToRepository() throws IOException {
-        setup();
         //given
         String apiUrl = "http://localhost:" + port + "/some/thing";
         Path filePath = Path.of("./src/test/resources/response1.json");
