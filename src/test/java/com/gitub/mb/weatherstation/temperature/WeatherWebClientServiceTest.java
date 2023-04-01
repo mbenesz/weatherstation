@@ -12,6 +12,8 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
@@ -80,7 +82,7 @@ public class WeatherWebClientServiceTest {
     }
 
     @Test
-    @DisplayName("Should return WeatherPont when call external API")
+    @DisplayName("Should return WeatherPont when call wiremock API")
     public void shouldReturnWeatherPointWhenCallApi() throws Exception {
         //given
         String apiUrl = "http://localhost:" + port + "/some/thing";
@@ -99,7 +101,7 @@ public class WeatherWebClientServiceTest {
     }
 
     @Test
-    @DisplayName("Should save json response from external Api to repository")
+    @DisplayName("Should save json response from wiremock Api to repository")
     public void shouldSaveResponseFromApiToRepository() throws IOException {
         //given
         String apiUrl = "http://localhost:" + port + "/some/thing";
@@ -114,5 +116,19 @@ public class WeatherWebClientServiceTest {
 
         //then
         Mockito.verify(temperatureRepository, times(1)).save(ArgumentMatchers.any());
+    }
+
+    @Test
+    @DisplayName("Should return 200 ok when call real API")
+    public void realTestApi() throws Exception {
+        //given
+        String apiUrl = realApiUrl;
+
+        //when
+        TestRestTemplate testRestTemplate = new TestRestTemplate();
+        ResponseEntity<String> response = testRestTemplate.getForEntity(apiUrl, String.class);
+
+        //then
+        assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 }
