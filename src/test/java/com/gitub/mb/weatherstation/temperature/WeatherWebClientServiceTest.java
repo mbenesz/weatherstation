@@ -48,23 +48,7 @@ public class WeatherWebClientServiceTest {
 
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(options().dynamicPort());
-
-    @Test
-    @DisplayName("Should return 200 ok when get on wiremock API")
-    public void wiremock_with_junit_test() throws Exception {
-        //given
-        String apiUrl = "http://localhost:" + port + "/some/thing";
-        configureFor("localhost", port);
-        stubFor(get(urlEqualTo("/some/thing")).willReturn(aResponse().withBody("the weather is fine")));
-
-        //when
-        TestRestTemplate testRestTemplate = new TestRestTemplate();
-        String response = testRestTemplate.getForObject(apiUrl, String.class);
-
-        //then
-        assertEquals("the weather is fine", response);
-        verify(getRequestedFor(urlEqualTo("/some/thing")));
-    }
+    
 
     @Test
     @DisplayName("Should map json response into WeatherPoint")
@@ -120,7 +104,7 @@ public class WeatherWebClientServiceTest {
 
     @Test
     @DisplayName("Should return 200 ok when call real API")
-    public void realTestApi() throws Exception {
+    public void shouldReturn200OkWhenCallRealApi() throws Exception {
         //given
         String apiUrl = realApiUrl;
 
@@ -130,5 +114,18 @@ public class WeatherWebClientServiceTest {
 
         //then
         assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    @DisplayName("Should return WeatherPont when call real API")
+    public void shouldReturnWeatherPointWhenCallRealApi() throws Exception {
+        //given
+        String apiUrl = realApiUrl;
+
+        //when
+        WeatherPoint weatherPoint = weatherWebClientService.retrieveWeatherPointFromApi(apiUrl);
+
+        //then
+        assertNotNull(weatherPoint);
     }
 }
