@@ -1,12 +1,14 @@
 package com.gitub.mb.weatherstation.temperature;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
+
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -22,33 +24,38 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 
 
 @SpringBootTest
-@RunWith(SpringRunner.class)
 public class WeatherWebClientServiceTest {
     @Value(value = "${text.api.url}")
     String realApiUrl;
 
     private int port;
+    private WireMockServer wireMockServer;
     private WeatherWebClientService weatherWebClientService;
     private TemperatureRepository temperatureRepository;
 
-    @Before
+    @BeforeEach
     public void setup() {
         temperatureRepository = mock(TemperatureRepository.class);
         weatherWebClientService = new WeatherWebClientService(new ObjectMapper(), new RestTemplate(), temperatureRepository);
-        port = wireMockRule.port();
+
+        wireMockServer = new WireMockServer();
+        wireMockServer.start();
+        WireMock.configureFor("localhost", wireMockServer.port());
+        port = wireMockServer.port();
     }
 
-    @Rule
-    public WireMockRule wireMockRule = new WireMockRule(options().dynamicPort());
-    
+    @AfterEach
+    public void stopServer() {
+        wireMockServer.stop();
+    }
 
     @Test
     @DisplayName("Should map json response into WeatherPoint")
