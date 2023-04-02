@@ -2,7 +2,6 @@ package com.gitub.mb.weatherstation.temperature;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.client.WireMock;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,15 +44,16 @@ public class WeatherWebClientServiceTest {
     public void setup() {
         temperatureRepository = mock(TemperatureRepository.class);
         weatherWebClientService = new WeatherWebClientService(new ObjectMapper(), new RestTemplate(), temperatureRepository);
-
-        wireMockServer = new WireMockServer();
-        wireMockServer.start();
-        WireMock.configureFor("localhost", wireMockServer.port());
-        port = wireMockServer.port();
     }
 
-    @AfterEach
-    public void stopServer() {
+    private void startWireMockServer() {
+        wireMockServer = new WireMockServer();
+        wireMockServer.start();
+        port = wireMockServer.port();
+        configureFor("localhost", port);
+    }
+
+    private void stopWireMockServer() {
         wireMockServer.stop();
     }
 
@@ -76,11 +76,11 @@ public class WeatherWebClientServiceTest {
     @DisplayName("Should return WeatherPont when call wiremock API")
     public void shouldReturnWeatherPointWhenCallApi() throws Exception {
         //given
+        startWireMockServer();
         String apiUrl = "http://localhost:" + port + "/some/thing";
         Path filePath = Path.of("./src/test/resources/response1.json");
         String content = Files.readString(filePath);
 
-        configureFor("localhost", port);
         stubFor(get(urlEqualTo("/some/thing")).willReturn(aResponse().withBody(content)));
 
         //when
@@ -89,17 +89,19 @@ public class WeatherWebClientServiceTest {
         //then
         assertNotNull(weatherPoint);
         verify(getRequestedFor(urlEqualTo("/some/thing")));
+
+        stopWireMockServer();
     }
 
     @Test
     @DisplayName("Should save json response from wiremock Api to repository")
     public void shouldSaveResponseFromApiToRepository() throws IOException {
         //given
+        startWireMockServer();
         String apiUrl = "http://localhost:" + port + "/some/thing";
         Path filePath = Path.of("./src/test/resources/response1.json");
         String content = Files.readString(filePath);
 
-        configureFor("localhost", port);
         stubFor(get(urlEqualTo("/some/thing")).willReturn(aResponse().withBody(content)));
 
         //when
@@ -107,6 +109,8 @@ public class WeatherWebClientServiceTest {
 
         //then
         Mockito.verify(temperatureRepository, times(1)).save(ArgumentMatchers.any());
+
+        stopWireMockServer();
     }
 
     @Test
