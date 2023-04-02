@@ -29,19 +29,19 @@ import static org.mockito.Mockito.times;
 
 
 @SpringBootTest
-public class WeatherWebClientServiceTest {
+public class OpenweathermapImplTest {
     @Value(value = "${text.api.url}")
     String realApiUrl;
 
     private int port;
     private WireMockServer wireMockServer;
-    private WeatherWebClientService weatherWebClientService;
+    private OpenweathermapImpl weatherWebServiceImpl;
     private TemperatureRepository temperatureRepository;
 
     @BeforeEach
     public void setup() {
         temperatureRepository = mock(TemperatureRepository.class);
-        weatherWebClientService = new WeatherWebClientService(new ObjectMapper(), new RestTemplate(), temperatureRepository);
+        weatherWebServiceImpl = new OpenweathermapImpl(new ObjectMapper(), new RestTemplate(), temperatureRepository);
     }
 
     private void startWireMockServer() {
@@ -63,7 +63,7 @@ public class WeatherWebClientServiceTest {
         String content = Files.readString(filePath);
 
         //when
-        WeatherPoint weatherPoint = weatherWebClientService.mapStringToWeatherPoint(content);
+        WeatherPoint weatherPoint = weatherWebServiceImpl.mapStringToWeatherPoint(content);
 
         //then
         assertNotNull(weatherPoint);
@@ -82,7 +82,7 @@ public class WeatherWebClientServiceTest {
         stubFor(get(urlEqualTo("/some/thing")).willReturn(aResponse().withBody(content)));
 
         //when
-        WeatherPoint weatherPoint = weatherWebClientService.retrieveWeatherPointFromApi(apiUrl);
+        WeatherPoint weatherPoint = weatherWebServiceImpl.retrieveWeatherPointFromApi(apiUrl);
 
         //then
         assertNotNull(weatherPoint);
@@ -103,7 +103,7 @@ public class WeatherWebClientServiceTest {
         stubFor(get(urlEqualTo("/some/thing")).willReturn(aResponse().withBody(content)));
 
         //when
-        weatherWebClientService.addRetrievedWeatherPoint(apiUrl);
+        weatherWebServiceImpl.addRetrievedWeatherPoint(apiUrl);
 
         //then
         Mockito.verify(temperatureRepository, times(1)).save(ArgumentMatchers.any());
@@ -132,7 +132,7 @@ public class WeatherWebClientServiceTest {
         String apiUrl = realApiUrl;
 
         //when
-        WeatherPoint weatherPoint = weatherWebClientService.retrieveWeatherPointFromApi(apiUrl);
+        WeatherPoint weatherPoint = weatherWebServiceImpl.retrieveWeatherPointFromApi(apiUrl);
 
         //then
         assertNotNull(weatherPoint);

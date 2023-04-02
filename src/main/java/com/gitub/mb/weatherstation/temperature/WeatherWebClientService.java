@@ -12,40 +12,11 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 @Service
-public class WeatherWebClientService {
-    private ObjectMapper objectMapper;
+public interface WeatherWebClientService {
 
-    private RestTemplate restTemplate;
-    private TemperatureRepository temperatureRepository;
+    WeatherPoint retrieveWeatherPointFromApi(String apiUrl);
 
-    public WeatherWebClientService(ObjectMapper objectMapper, RestTemplate restTemplate, TemperatureRepository temperatureRepository) {
-        this.objectMapper = objectMapper;
-        this.restTemplate = restTemplate;
-        this.temperatureRepository = temperatureRepository;
-    }
+    WeatherPoint mapStringToWeatherPoint(String response);
 
-    public WeatherPoint retrieveWeatherPointFromApi(@Value("${text.api.url}") String apiUrl) {
-        String response = restTemplate.getForObject(apiUrl, String.class);
-        return mapStringToWeatherPoint(response);
-    }
-
-    public WeatherPoint mapStringToWeatherPoint(String response) {
-
-        Object temperature = null;
-        try {
-            Map<String, Map<String, Object>> map = objectMapper.readValue(response, Map.class);
-            temperature = map.get("main").get("temp");
-
-        } catch (JsonProcessingException e) {
-            e.getMessage();
-        }
-
-        return new WeatherPoint((Double) temperature, Timestamp.valueOf(LocalDateTime.now()));
-    }
-
-    public void addRetrievedWeatherPoint(@Value("${text.api.url}") String apiUrl) {
-        String response = restTemplate.getForObject(apiUrl, String.class);
-        WeatherPoint weatherPoint = mapStringToWeatherPoint(response);
-        temperatureRepository.save(weatherPoint);
-    }
+    void addRetrievedWeatherPoint(String apiUrl);
 }
