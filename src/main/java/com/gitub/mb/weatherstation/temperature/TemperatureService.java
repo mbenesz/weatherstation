@@ -8,16 +8,18 @@ import java.util.NoSuchElementException;
 @Service
 public class TemperatureService {
     private TemperatureRepository temperatureRepository;
+    private WeatherWebClientService weatherService;
 
-    public TemperatureService(TemperatureRepository temperatureRepository) {
+    public TemperatureService(TemperatureRepository temperatureRepository, WeatherWebClientService weatherService) {
         this.temperatureRepository = temperatureRepository;
+        this.weatherService = weatherService;
 
     }
 
     @Cacheable(cacheNames = "retrieveTemperature")
     public WeatherPoint retrieveTemperature()  {
         return temperatureRepository.findTopByOrderByIdDesc()
-                .orElseThrow(NoSuchElementException::new);
+                .orElse(weatherService.retrieveWeatherPointFromApi());
     }
 
     public void addTemperature(WeatherPoint weatherPoint) {
