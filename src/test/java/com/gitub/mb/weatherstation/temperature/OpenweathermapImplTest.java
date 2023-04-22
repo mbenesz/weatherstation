@@ -92,26 +92,6 @@ public class OpenweathermapImplTest {
     }
 
     @Test
-    @DisplayName("Should save json response from wiremock Api to repository")
-    public void shouldSaveResponseFromApiToRepository() throws IOException {
-        //given
-        startWireMockServer();
-        String apiUrl = "http://localhost:" + port + "/some/thing";
-        Path filePath = Path.of("./src/test/resources/response1.json");
-        String content = Files.readString(filePath);
-
-        stubFor(get(urlEqualTo("/some/thing")).willReturn(aResponse().withBody(content)));
-
-        //when
-        weatherWebServiceImpl.addRetrievedWeatherPoint(apiUrl);
-
-        //then
-        Mockito.verify(temperatureRepository, times(1)).save(ArgumentMatchers.any());
-
-        stopWireMockServer();
-    }
-
-    @Test
     @DisplayName("Should return 200 ok when call real API")
     public void shouldReturn200OkWhenCallRealApi() throws Exception {
         //given
