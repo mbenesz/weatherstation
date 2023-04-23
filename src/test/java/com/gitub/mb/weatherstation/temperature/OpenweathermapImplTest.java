@@ -75,18 +75,18 @@ public class OpenweathermapImplTest {
     public void shouldReturnWeatherPointWhenCallApi() throws Exception {
         //given
         startWireMockServer();
-        String apiUrl = "http://localhost:" + port + "/temperature";
+        String apiUrl = "http://localhost:" + port + "/some/thing";
         Path filePath = Path.of("./src/test/resources/response1.json");
         String content = Files.readString(filePath);
 
-        stubFor(get(urlEqualTo("/temperature")).willReturn(aResponse().withBody(content)));
+        stubFor(get(urlEqualTo("/some/thing")).willReturn(aResponse().withBody(content)));
 
         //when
         WeatherPoint weatherPoint = weatherWebServiceImpl.retrieveWeatherPointFromApi(apiUrl);
 
         //then
         assertNotNull(weatherPoint);
-        verify(getRequestedFor(urlEqualTo("/temperature")));
+        verify(getRequestedFor(urlEqualTo("/some/thing")));
 
         stopWireMockServer();
     }
