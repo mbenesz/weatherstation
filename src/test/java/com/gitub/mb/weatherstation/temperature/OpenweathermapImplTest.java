@@ -41,7 +41,7 @@ public class OpenweathermapImplTest {
     @BeforeEach
     public void setup() {
         temperatureRepository = mock(TemperatureRepository.class);
-        weatherWebServiceImpl = new OpenweathermapImpl(new ObjectMapper(), new RestTemplate(), temperatureRepository);
+        weatherWebServiceImpl = new OpenweathermapImpl(new ObjectMapper(), new RestTemplate(), realApiUrl);
     }
 
     private void startWireMockServer() {
@@ -82,7 +82,7 @@ public class OpenweathermapImplTest {
         stubFor(get(urlEqualTo("/some/thing")).willReturn(aResponse().withBody(content)));
 
         //when
-        WeatherPoint weatherPoint = weatherWebServiceImpl.retrieveWeatherPointFromApi(apiUrl);
+        WeatherPoint weatherPoint = weatherWebServiceImpl.retrieveWeatherPointFromApi();
 
         //then
         assertNotNull(weatherPoint);
@@ -132,7 +132,7 @@ public class OpenweathermapImplTest {
         String apiUrl = realApiUrl;
 
         //when
-        WeatherPoint weatherPoint = weatherWebServiceImpl.retrieveWeatherPointFromApi(apiUrl);
+        WeatherPoint weatherPoint = weatherWebServiceImpl.retrieveWeatherPointFromApi();
 
         //then
         assertNotNull(weatherPoint);

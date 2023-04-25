@@ -14,7 +14,7 @@ import java.util.Map;
 @Service
 public interface WeatherWebClientService {
 
-    WeatherPoint retrieveWeatherPointFromApi(String apiUrl);
+    WeatherPoint retrieveWeatherPointFromApi();
 
     WeatherPoint mapStringToWeatherPoint(String response);
 
