@@ -19,7 +19,7 @@ public class TemperatureService {
     @Cacheable(cacheNames = "retrieveTemperature")
     public WeatherPoint retrieveTemperature()  {
         return temperatureRepository.findTopByOrderByIdDesc()
-                .orElse(weatherService.retrieveWeatherPointFromApi());
+                .orElseThrow(NoSuchElementException::new);
     }
 
     public void addTemperature(WeatherPoint weatherPoint) {
