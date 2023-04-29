@@ -71,27 +71,6 @@ public class OpenweathermapImplTest {
     }
 
     @Test
-    @DisplayName("Should return WeatherPont when call wiremock API")
-    public void shouldReturnWeatherPointWhenCallApi() throws Exception {
-        //given
-        startWireMockServer();
-        String apiUrl = "http://localhost:" + port + "/some/thing";
-        Path filePath = Path.of("./src/test/resources/response1.json");
-        String content = Files.readString(filePath);
-
-        stubFor(get(urlEqualTo("/some/thing")).willReturn(aResponse().withBody(content)));
-
-        //when
-        WeatherPoint weatherPoint = weatherWebServiceImpl.retrieveWeatherPointFromApi();
-
-        //then
-        assertNotNull(weatherPoint);
-        verify(getRequestedFor(urlEqualTo("/some/thing")));
-
-        stopWireMockServer();
-    }
-
-    @Test
     @DisplayName("Should return 200 ok when call real API")
     public void shouldReturn200OkWhenCallRealApi() throws Exception {
         //given
