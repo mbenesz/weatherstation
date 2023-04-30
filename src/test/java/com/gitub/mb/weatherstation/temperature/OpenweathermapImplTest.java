@@ -74,8 +74,9 @@ public class OpenweathermapImplTest {
         String content = Files.readString(filePath);
         WeatherPoint expectedWeatherPoint = new WeatherPoint(4.0, Timestamp.valueOf(LocalDateTime.now()));
         when(restTemplate.getForObject(realApiUrl, String.class)).thenReturn(content);
-        when(temperatureRepository.save(expectedWeatherPoint)).thenReturn(expectedWeatherPoint);
         when(openWeathermapMapper.mapStringToWeatherPoint(content)).thenReturn(expectedWeatherPoint);
+        when(temperatureRepository.save(expectedWeatherPoint)).thenReturn(expectedWeatherPoint);
+
 
         //when
         WeatherPoint weatherPoint = weatherWebServiceImpl.retrieveWeatherPointFromApi();
