@@ -7,13 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.client.RestTemplate;
 
@@ -23,16 +18,15 @@ import java.nio.file.Path;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 
 @SpringBootTest
-public class OpenweathermapImplTest {
+public class OpenweathermapTest {
     @Value(value = "${text.api.url}")
-    String realApiUrl;
+    String fakeApiUrl;
 
     private int port;
     private WireMockServer wireMockServer;
@@ -46,7 +40,7 @@ public class OpenweathermapImplTest {
         temperatureRepository = mock(TemperatureRepository.class);
         restTemplate = mock(RestTemplate.class);
         openWeathermapMapper = mock(OpenWeathermapMapper.class);
-        weatherWebServiceImpl = new OpenweathermapImpl(openWeathermapMapper, restTemplate, temperatureRepository,realApiUrl);
+        weatherWebServiceImpl = new OpenweathermapImpl(openWeathermapMapper, restTemplate, temperatureRepository, fakeApiUrl);
     }
 
     @Test
@@ -73,7 +67,7 @@ public class OpenweathermapImplTest {
         Path filePath = Path.of("./src/test/resources/response1.json");
         String content = Files.readString(filePath);
         WeatherPoint expectedWeatherPoint = new WeatherPoint(4.0, Timestamp.valueOf(LocalDateTime.now()));
-        when(restTemplate.getForObject(realApiUrl, String.class)).thenReturn(content);
+        when(restTemplate.getForObject(fakeApiUrl, String.class)).thenReturn(content);
         when(openWeathermapMapper.mapStringToWeatherPoint(content)).thenReturn(expectedWeatherPoint);
         when(temperatureRepository.save(expectedWeatherPoint)).thenReturn(expectedWeatherPoint);
 
