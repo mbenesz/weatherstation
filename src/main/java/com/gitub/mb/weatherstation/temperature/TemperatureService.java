@@ -9,17 +9,18 @@ import java.util.NoSuchElementException;
 public class TemperatureService {
     private TemperatureRepository temperatureRepository;
     private WeatherWebClientService weatherService;
+    private OpenweathermapImpl openweathermap;
 
-    public TemperatureService(TemperatureRepository temperatureRepository, WeatherWebClientService weatherService) {
+    public TemperatureService(TemperatureRepository temperatureRepository, WeatherWebClientService weatherService, OpenweathermapImpl openweathermap) {
         this.temperatureRepository = temperatureRepository;
         this.weatherService = weatherService;
-
+        this.openweathermap = openweathermap;
     }
 
     @Cacheable(cacheNames = "retrieveTemperature")
     public WeatherPoint retrieveTemperature()  {
         return temperatureRepository.findTopByOrderByIdDesc()
-                .orElseThrow(NoSuchElementException::new);
+                .orElse(openweathermap.addRetrievedWeatherPoint());
     }
 
     public void addTemperature(WeatherPoint weatherPoint) {

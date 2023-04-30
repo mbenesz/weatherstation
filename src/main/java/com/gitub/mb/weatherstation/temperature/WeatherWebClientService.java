@@ -18,5 +18,5 @@ public interface WeatherWebClientService {
 
     WeatherPoint mapStringToWeatherPoint(String response);
 
-    void addRetrievedWeatherPoint(String apiUrl);
+    WeatherPoint addRetrievedWeatherPoint();
 }

@@ -15,9 +15,10 @@ public class OpenweathermapImpl implements WeatherWebClientService {
 
     private RestTemplate restTemplate;
     private TemperatureRepository temperatureRepository;
-   private String apiUrl;
+    @Value("${text.api.url}")
+    private String apiUrl;
 
-    public OpenweathermapImpl(ObjectMapper objectMapper, RestTemplate restTemplate, @Value("${text.api.url}") String apiUrl) {
+    public OpenweathermapImpl(ObjectMapper objectMapper, RestTemplate restTemplate, String apiUrl) {
         this.objectMapper = objectMapper;
         this.restTemplate = restTemplate;
         this.apiUrl = apiUrl;
@@ -43,9 +44,9 @@ public class OpenweathermapImpl implements WeatherWebClientService {
         return new WeatherPoint((Double) temperature, Timestamp.valueOf(LocalDateTime.now()));
     }
     @Override
-    public void addRetrievedWeatherPoint(@Value("${text.api.url}") String apiUrl) {
+    public WeatherPoint addRetrievedWeatherPoint() {
         String response = restTemplate.getForObject(apiUrl, String.class);
         WeatherPoint weatherPoint = mapStringToWeatherPoint(response);
-        temperatureRepository.save(weatherPoint);
+        return temperatureRepository.save(weatherPoint);
     }
 }

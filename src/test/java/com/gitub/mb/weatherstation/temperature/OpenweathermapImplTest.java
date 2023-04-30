@@ -44,17 +44,6 @@ public class OpenweathermapImplTest {
         weatherWebServiceImpl = new OpenweathermapImpl(new ObjectMapper(), new RestTemplate(), realApiUrl);
     }
 
-    private void startWireMockServer() {
-        wireMockServer = new WireMockServer();
-        wireMockServer.start();
-        port = wireMockServer.port();
-        configureFor("localhost", port);
-    }
-
-    private void stopWireMockServer() {
-        wireMockServer.stop();
-    }
-
     @Test
     @DisplayName("Should map json response into WeatherPoint")
     public void shouldMapJsonResponseToWeatherPoint() throws IOException {

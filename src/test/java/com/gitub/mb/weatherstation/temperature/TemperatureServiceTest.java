@@ -22,7 +22,7 @@ class TemperatureServiceTest {
     void setup() {
         temperatureRepository = mock(TemperatureRepository.class);
         WeatherWebClientService weatherWebClientService = mock(WeatherWebClientService.class);;
-        temperatureService = new TemperatureService(temperatureRepository, weatherWebClientService);
+        temperatureService = new TemperatureService(temperatureRepository, weatherWebClientService, openweathermap);
     }
 
     @Test
