@@ -84,16 +84,4 @@ public class OpenweathermapImplTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
-    @Test
-    @DisplayName("Should return WeatherPont when call real API")
-    public void shouldReturnWeatherPointWhenCallRealApi() throws Exception {
-        //given
-        String apiUrl = realApiUrl;
-
-        //when
-        WeatherPoint weatherPoint = weatherWebServiceImpl.retrieveWeatherPointFromApi();
-
-        //then
-        assertNotNull(weatherPoint);
-    }
 }

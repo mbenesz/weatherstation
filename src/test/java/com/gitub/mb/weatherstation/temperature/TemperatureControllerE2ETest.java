@@ -71,10 +71,9 @@ public class TemperatureControllerE2ETest {
         String apiUrl = "http://localhost:" + port + "/temperature";
         Path filePath = Path.of("./src/test/resources/response1.json");
         String content = Files.readString(filePath);
+        OpenweathermapImpl weatherWebServiceImpl = new OpenweathermapImpl(new ObjectMapper(), new RestTemplate(), apiUrl);
 
         stubFor(get(urlEqualTo("/temperature")).willReturn(aResponse().withBody(content)));
-
-        OpenweathermapImpl weatherWebServiceImpl = new OpenweathermapImpl(new ObjectMapper(), new RestTemplate(), apiUrl);
 
         //when
         WeatherPoint weatherPoint = weatherWebServiceImpl.retrieveWeatherPointFromApi();
