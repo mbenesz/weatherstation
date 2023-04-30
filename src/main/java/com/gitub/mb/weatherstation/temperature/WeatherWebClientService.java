@@ -16,6 +16,5 @@ public interface WeatherWebClientService {
 
     WeatherPoint retrieveWeatherPointFromApi();
 
-    WeatherPoint mapStringToWeatherPoint(String response);
 
 }

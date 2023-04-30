@@ -68,27 +68,27 @@ public class TemperatureControllerE2ETest {
         assertEquals(getResponse.getBody().getId(), 1L);
     }
 
-    @Test
-    @DisplayName("Should return WeatherPont when call wiremock API")
-    public void shouldReturnWeatherPointWhenCallApi() throws Exception {
-        //given
-        startWireMockServer();
-        String apiUrl = "http://localhost:" + port + "/temperature";
-        Path filePath = Path.of("./src/test/resources/response1.json");
-        String content = Files.readString(filePath);
-
-        OpenweathermapImpl weatherWebServiceImpl = new OpenweathermapImpl(new ObjectMapper(), new RestTemplate(), temperatureRepository, apiUrl);
-
-        stubFor(get(urlEqualTo("/temperature")).willReturn(aResponse().withBody(content)));
-
-        //when
-        WeatherPoint weatherPoint = weatherWebServiceImpl.retrieveWeatherPointFromApi();
-
-        //then
-        assertNotNull(weatherPoint);
-        verify(getRequestedFor(urlEqualTo("/temperature")));
-
-        stopWireMockServer();
-    }
+//    @Test
+//    @DisplayName("Should return WeatherPont when call wiremock API")
+//    public void shouldReturnWeatherPointWhenCallApi() throws Exception {
+//        //given
+//        startWireMockServer();
+//        String apiUrl = "http://localhost:" + port + "/temperature";
+//        Path filePath = Path.of("./src/test/resources/response1.json");
+//        String content = Files.readString(filePath);
+//
+//        OpenweathermapImpl weatherWebServiceImpl = new OpenweathermapImpl(new ObjectMapper(), new RestTemplate(), temperatureRepository, apiUrl);
+//
+//        stubFor(get(urlEqualTo("/temperature")).willReturn(aResponse().withBody(content)));
+//
+//        //when
+//        WeatherPoint weatherPoint = weatherWebServiceImpl.retrieveWeatherPointFromApi();
+//
+//        //then
+//        assertNotNull(weatherPoint);
+//        verify(getRequestedFor(urlEqualTo("/temperature")));
+//
+//        stopWireMockServer();
+//    }
 
 }

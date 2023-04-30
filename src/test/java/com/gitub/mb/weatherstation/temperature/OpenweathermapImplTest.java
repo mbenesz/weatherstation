@@ -20,12 +20,13 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.*;
 
 
 @SpringBootTest
@@ -37,11 +38,15 @@ public class OpenweathermapImplTest {
     private WireMockServer wireMockServer;
     private OpenweathermapImpl weatherWebServiceImpl;
     private TemperatureRepository temperatureRepository;
+    private RestTemplate restTemplate;
+    private OpenWeathermapMapper openWeathermapMapper;
 
     @BeforeEach
     public void setup() {
         temperatureRepository = mock(TemperatureRepository.class);
-        weatherWebServiceImpl = new OpenweathermapImpl(new ObjectMapper(), new RestTemplate(), temperatureRepository,realApiUrl);
+        restTemplate = mock(RestTemplate.class);
+        openWeathermapMapper = mock(OpenWeathermapMapper.class);
+        weatherWebServiceImpl = new OpenweathermapImpl(openWeathermapMapper, restTemplate, temperatureRepository,realApiUrl);
     }
 
     @Test
@@ -51,8 +56,10 @@ public class OpenweathermapImplTest {
         Path filePath = Path.of("./src/test/resources/response1.json");
         String content = Files.readString(filePath);
 
+        OpenWeathermapMapper openWeathermapMapper = new OpenWeathermapMapper(new ObjectMapper());
+
         //when
-        WeatherPoint weatherPoint = weatherWebServiceImpl.mapStringToWeatherPoint(content);
+        WeatherPoint weatherPoint = openWeathermapMapper.mapStringToWeatherPoint(content);
 
         //then
         assertNotNull(weatherPoint);
@@ -60,17 +67,23 @@ public class OpenweathermapImplTest {
     }
 
     @Test
-    @DisplayName("Should return 200 ok when call real API")
-    public void shouldReturn200OkWhenCallRealApi() throws Exception {
+    @DisplayName("Sould retrieve and add new WeatherPoint when call Api")
+    public void shouldRetrieveAndAddWeatherPointWhenCallExternalApi() throws IOException {
         //given
-        String apiUrl = realApiUrl;
+        Path filePath = Path.of("./src/test/resources/response1.json");
+        String content = Files.readString(filePath);
+        WeatherPoint expectedWeatherPoint = new WeatherPoint(4.0, Timestamp.valueOf(LocalDateTime.now()));
+        when(restTemplate.getForObject(realApiUrl, String.class)).thenReturn(content);
+        when(temperatureRepository.save(expectedWeatherPoint)).thenReturn(expectedWeatherPoint);
+        when(openWeathermapMapper.mapStringToWeatherPoint(content)).thenReturn(expectedWeatherPoint);
 
         //when
-        TestRestTemplate testRestTemplate = new TestRestTemplate();
-        ResponseEntity<String> response = testRestTemplate.getForEntity(apiUrl, String.class);
+        WeatherPoint weatherPoint = weatherWebServiceImpl.retrieveWeatherPointFromApi();
 
         //then
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(weatherPoint);
+        verify(temperatureRepository, times(1)).save(expectedWeatherPoint);
+
     }
 
 }
