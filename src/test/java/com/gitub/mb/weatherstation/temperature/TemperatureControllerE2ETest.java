@@ -22,6 +22,9 @@ import java.time.LocalDateTime;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class TemperatureControllerE2ETest {
@@ -31,7 +34,9 @@ public class TemperatureControllerE2ETest {
 
     @Autowired
     private TestRestTemplate restTemplate;
+    @Autowired TemperatureRepository temperatureRepository;
     private WireMockServer wireMockServer;
+
 
     private void startWireMockServer() {
         wireMockServer = new WireMockServer();
@@ -71,7 +76,8 @@ public class TemperatureControllerE2ETest {
         String apiUrl = "http://localhost:" + port + "/temperature";
         Path filePath = Path.of("./src/test/resources/response1.json");
         String content = Files.readString(filePath);
-        OpenweathermapImpl weatherWebServiceImpl = new OpenweathermapImpl(new ObjectMapper(), new RestTemplate(), apiUrl);
+
+        OpenweathermapImpl weatherWebServiceImpl = new OpenweathermapImpl(new ObjectMapper(), new RestTemplate(), temperatureRepository, apiUrl);
 
         stubFor(get(urlEqualTo("/temperature")).willReturn(aResponse().withBody(content)));
 

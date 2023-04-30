@@ -41,7 +41,7 @@ public class OpenweathermapImplTest {
     @BeforeEach
     public void setup() {
         temperatureRepository = mock(TemperatureRepository.class);
-        weatherWebServiceImpl = new OpenweathermapImpl(new ObjectMapper(), new RestTemplate(), realApiUrl);
+        weatherWebServiceImpl = new OpenweathermapImpl(new ObjectMapper(), new RestTemplate(), temperatureRepository,realApiUrl);
     }
 
     @Test

@@ -21,7 +21,8 @@ class TemperatureServiceTest {
     @BeforeEach
     void setup() {
         temperatureRepository = mock(TemperatureRepository.class);
-        WeatherWebClientService weatherWebClientService = mock(WeatherWebClientService.class);;
+        WeatherWebClientService weatherWebClientService = mock(WeatherWebClientService.class);
+        OpenweathermapImpl openweathermap = mock(OpenweathermapImpl.class);
         temperatureService = new TemperatureService(temperatureRepository, weatherWebClientService, openweathermap);
     }
 
