@@ -26,6 +26,6 @@ public class OpenWeathermapMapper {
             e.getMessage();
         }
 
-        return new WeatherPoint((Double) temperature, Timestamp.valueOf(LocalDateTime.now()));
+        return new WeatherPoint(Double.valueOf(temperature.toString()) , Timestamp.valueOf(LocalDateTime.now()));
     }
 }

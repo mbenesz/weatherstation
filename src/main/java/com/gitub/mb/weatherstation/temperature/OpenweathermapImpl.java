@@ -17,7 +17,6 @@ public class OpenweathermapImpl implements WeatherWebClientService {
     private RestTemplate restTemplate;
     private TemperatureRepository temperatureRepository;
 
-    @Value("${text.api.url}")
     private String apiUrl;
 
     public OpenweathermapImpl(OpenWeathermapMapper openWeathermapMapper, RestTemplate restTemplate,
@@ -28,26 +27,6 @@ public class OpenweathermapImpl implements WeatherWebClientService {
         this.apiUrl = apiUrl;
     }
 
-    //    @Override
-//    public WeatherPoint retrieveWeatherPointFromApi() {
-//        String response = restTemplate.getForObject(apiUrl, String.class);
-//        WeatherPoint weatherPoint = mapStringToWeatherPoint(response);
-//        return temperatureRepository.save(weatherPoint);
-//    }
-//    @Override
-//    public WeatherPoint mapStringToWeatherPoint(String response) {
-//
-//        Object temperature = null;
-//        try {
-//            Map<String, Map<String, Object>> map = objectMapper.readValue(response, Map.class);
-//            temperature = map.get("main").get("temp");
-//
-//        } catch (JsonProcessingException e) {
-//            e.getMessage();
-//        }
-//
-//        return new WeatherPoint((Double) temperature, Timestamp.valueOf(LocalDateTime.now()));
-//    }
     @Override
     public WeatherPoint retrieveWeatherPointFromApi() {
         String response = restTemplate.getForObject(apiUrl, String.class);

@@ -9,21 +9,20 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 class TemperatureServiceTest {
 
     private TemperatureRepository temperatureRepository;
     private TemperatureService temperatureService;
+    private WeatherWebClientService weatherWebClientService;
 
 
     @BeforeEach
     void setup() {
         temperatureRepository = mock(TemperatureRepository.class);
-        WeatherWebClientService weatherWebClientService = mock(WeatherWebClientService.class);
-        OpenweathermapImpl openweathermap = mock(OpenweathermapImpl.class);
-        temperatureService = new TemperatureService(temperatureRepository, weatherWebClientService, openweathermap);
+        weatherWebClientService = mock(WeatherWebClientService.class);
+        temperatureService = new TemperatureService(temperatureRepository, weatherWebClientService);
     }
 
     @Test
@@ -31,7 +30,7 @@ class TemperatureServiceTest {
     void shouldRetrieveTemperatureFromRepo() {
         //given
         Optional<WeatherPoint> weatherPoint = Optional.of(new WeatherPoint(Long.MAX_VALUE, 5.0, Timestamp.valueOf(LocalDateTime.now())));
-        given(temperatureRepository.findTopByOrderByIdDesc()).willReturn(weatherPoint);
+        when(temperatureRepository.findTopByOrderByIdDesc()).thenReturn(weatherPoint);
 
         //when
         WeatherPoint weatherDataPoint = temperatureService.retrieveTemperature();
@@ -40,6 +39,21 @@ class TemperatureServiceTest {
         verify(temperatureRepository, times(1)).findTopByOrderByIdDesc();
         assertNotNull(weatherDataPoint);
         assertNotNull(weatherDataPoint.getTemperature());
+    }
+
+    @Test
+    @DisplayName("Should retrieve temperature from external Api when DB is empty")
+    void shouldRetrieveTemperatureFromExternalApi() {
+        //given
+        WeatherPoint expectedWeatherPoint = new WeatherPoint(13.0, Timestamp.valueOf(LocalDateTime.now()));
+        when(temperatureRepository.findTopByOrderByIdDesc()).thenReturn(Optional.empty());
+        when(weatherWebClientService.retrieveWeatherPointFromApi()).thenReturn(expectedWeatherPoint);
+
+        //when
+        WeatherPoint weatherDataPoint = temperatureService.retrieveTemperature();
+
+        //then
+        assertEquals(13.0, weatherDataPoint.getTemperature());
     }
 
     @Test

@@ -7,8 +7,8 @@ ehcache:
     alias: 'retrieveTemperature'
     expiry:
       ttl:
-        unit: 'hours'
-        value: 1
+        unit: 'seconds'
+        value: 10
     heap:
       unit: 'entries'
       value: 1

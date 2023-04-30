@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -48,15 +50,20 @@ public class TemperatureControllerIT {
                         .content(objectMapper.writeValueAsString(weatherPoint))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andDo(print());
+                .andExpect(status().isCreated());
     }
 
     @Test
-    @DisplayName("Should return 404 status when get temperature")
-    public void shouldReturn404WhenGetTemperature() throws Exception {
+    @DisplayName("Should retrieve WeatherPoint from external API when DB is empty")
+    public void shouldReturnWeatherPointFromExternalApiWhenDbIsEmpty() throws Exception {
+        //given
+        WeatherPoint expectedWeatherPoint = new WeatherPoint(13.0, Timestamp.valueOf(LocalDateTime.now()));
+        WeatherWebClientService weatherWebClientService = mock(WeatherWebClientService.class);
+        when(weatherWebClientService.retrieveWeatherPointFromApi()).thenReturn(expectedWeatherPoint);
+        //then
         mockMvc.perform(get("/temperature"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.temperature").value(13.0));
     }
 
 }
