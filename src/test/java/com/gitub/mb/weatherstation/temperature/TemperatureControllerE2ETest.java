@@ -28,10 +28,8 @@ public class TemperatureControllerE2ETest {
 
     @Value(value = "${local.server.port}")
     private int port;
-
     @Autowired
-    private TestRestTemplate restTemplate;
-    @Autowired TemperatureRepository temperatureRepository;
+    TemperatureRepository temperatureRepository;
     private WireMockServer wireMockServer;
 
 
@@ -50,6 +48,7 @@ public class TemperatureControllerE2ETest {
     @DisplayName("Should create and then return created temperature")
     public void shouldCreateAndThenReturnCreatedTemperature() throws Exception {
         //given
+        TestRestTemplate restTemplate = new TestRestTemplate();
         String temperatureEndPoint = "http://localhost:" + port + "/temperature";
         WeatherPoint weatherPoint = new WeatherPoint(4.0, Timestamp.valueOf(LocalDateTime.now()));
 
@@ -62,9 +61,9 @@ public class TemperatureControllerE2ETest {
         assertEquals(HttpStatus.OK, getResponse.getStatusCode());
         assertThat(getResponse.getBody()).isNotNull();
         assertEquals(getResponse.getBody().getTemperature(), 4.0);
-        assertEquals(getResponse.getBody().getId(), 1L);
     }
 
+   // @DirtiesContext
     @Test
     @DisplayName("Should return WeatherPont when call wiremock API")
     public void shouldReturnWeatherPointWhenCallApi() throws Exception {

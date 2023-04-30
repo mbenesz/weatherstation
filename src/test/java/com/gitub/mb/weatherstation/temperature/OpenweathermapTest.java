@@ -1,13 +1,10 @@
 package com.gitub.mb.weatherstation.temperature;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.tomakehurst.wiremock.WireMockServer;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import org.springframework.web.client.RestTemplate;
@@ -25,17 +22,13 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 public class OpenweathermapTest {
-    @Value(value = "${text.api.url}")
-    String fakeApiUrl;
-
-    private int port;
-    private WireMockServer wireMockServer;
+    private final String fakeApiUrl = "https://apiTest";
     private OpenweathermapImpl weatherWebServiceImpl;
     private TemperatureRepository temperatureRepository;
     private RestTemplate restTemplate;
     private OpenWeathermapMapper openWeathermapMapper;
 
-    @BeforeEach
+
     public void setup() {
         temperatureRepository = mock(TemperatureRepository.class);
         restTemplate = mock(RestTemplate.class);
@@ -44,7 +37,7 @@ public class OpenweathermapTest {
     }
 
     @Test
-    @DisplayName("Should map json response into WeatherPoint")
+    @DisplayName("Should map json response into WeatherPoint object")
     public void shouldMapJsonResponseToWeatherPoint() throws IOException {
         //given
         Path filePath = Path.of("./src/test/resources/response1.json");
@@ -61,16 +54,16 @@ public class OpenweathermapTest {
     }
 
     @Test
-    @DisplayName("Sould retrieve and add new WeatherPoint when call Api")
+    @DisplayName("Should retrieve and add new WeatherPoint when call external Api")
     public void shouldRetrieveAndAddWeatherPointWhenCallExternalApi() throws IOException {
         //given
-        Path filePath = Path.of("./src/test/resources/response1.json");
-        String content = Files.readString(filePath);
+        setup();
+        String content = "sample response";
         WeatherPoint expectedWeatherPoint = new WeatherPoint(4.0, Timestamp.valueOf(LocalDateTime.now()));
+
         when(restTemplate.getForObject(fakeApiUrl, String.class)).thenReturn(content);
         when(openWeathermapMapper.mapStringToWeatherPoint(content)).thenReturn(expectedWeatherPoint);
         when(temperatureRepository.save(expectedWeatherPoint)).thenReturn(expectedWeatherPoint);
-
 
         //when
         WeatherPoint weatherPoint = weatherWebServiceImpl.retrieveWeatherPointFromApi();
@@ -78,7 +71,6 @@ public class OpenweathermapTest {
         //then
         assertNotNull(weatherPoint);
         verify(temperatureRepository, times(1)).save(expectedWeatherPoint);
-
     }
 
 }

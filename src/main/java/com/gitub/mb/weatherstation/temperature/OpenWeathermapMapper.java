@@ -7,9 +7,10 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Map;
+
 @Service
 public class OpenWeathermapMapper {
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
     public OpenWeathermapMapper(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
@@ -26,6 +27,6 @@ public class OpenWeathermapMapper {
             e.getMessage();
         }
 
-        return new WeatherPoint(Double.valueOf(temperature.toString()) , Timestamp.valueOf(LocalDateTime.now()));
+        return new WeatherPoint(Double.valueOf(temperature.toString()), Timestamp.valueOf(LocalDateTime.now()));
     }
 }
