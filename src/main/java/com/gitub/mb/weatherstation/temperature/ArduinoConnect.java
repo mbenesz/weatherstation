@@ -14,8 +14,7 @@ public class ArduinoConnect {
     public final StringBuilder measurments;
     private final Scanner scanner;
 
-    public ArduinoConnect(SerialPort comPort, StringBuilder measurments, Scanner scanner) {
-        this.comPort = comPort;
+    public ArduinoConnect(StringBuilder measurments, Scanner scanner) {
         this.measurments = measurments;
         this.scanner = scanner;
     }
@@ -54,6 +53,7 @@ public class ArduinoConnect {
 
         return measurments;
     }
+
 
 }
 

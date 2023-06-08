@@ -10,6 +10,8 @@ import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Scanner;
+
 @SpringBootApplication
 @EnableCaching
 public class WeatherstationApplication {
@@ -30,6 +32,14 @@ public class WeatherstationApplication {
 	@Bean
 	public CacheManager cacheManager() {
 		return new ConcurrentMapCacheManager("retrieveTemperature");
+	}
+	@Bean
+	public StringBuilder stringBuilder() {
+		return new StringBuilder();
+	}
+	@Bean
+	public Scanner scanner() {
+		return new Scanner(System.in);
 	}
 
 }
