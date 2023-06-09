@@ -14,11 +14,12 @@ public class ArduinoMapper {
     }
 
     public WeatherPoint retrieveWeatherPointFromArduino() {
-        StringBuilder measurments = arduinoConnect.getMeasurments();
-        String[] split = measurments.toString().split("\n");
-        String temperature = split[1];  //[0] measurment is skipped, second is valid
+        StringBuilder measurments = arduinoConnect.getMeasurment();
+        String s = measurments.toString().split("\n")[0];
 
-        return new WeatherPoint(Double.valueOf(temperature), Timestamp.valueOf(LocalDateTime.now()));
+        Double temperature = Double.valueOf(s);
+
+        return new WeatherPoint(temperature, Timestamp.valueOf(LocalDateTime.now()));
     }
 
 }
